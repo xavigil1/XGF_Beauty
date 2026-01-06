@@ -1,0 +1,252 @@
+@use "variables" as v;
+
+// 1. ESTILOS GLOBALES DE LA SECCIÓN
+.products {
+    padding: 5rem 0;
+
+    .section-title {
+        text-align: center;
+        font-family: v.$font-title;
+        font-size: clamp(2rem, 4vw, 2.5rem); 
+        margin-top: 2rem;
+        margin-bottom: 3rem;
+    }
+}
+
+// 2. COMPONENTE CARD (Tarjeta de producto)
+.product-card {
+    background: v.$color-white;
+    border-radius: 4px; 
+    transition: v.$transition;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    scroll-snap-align: start; // Imanta la tarjeta al borde al deslizar
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: v.$shadow-soft;
+    }
+
+    img {
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+        border-radius: 4px 4px 0 0;
+        
+        @media (max-width: v.$tablet) {
+            height: 250px; // Un poco más bajas en móvil para no ocupar toda la pantalla
+        }
+    }
+
+    .info {
+        padding: 15px;
+        text-align: center;
+        flex-grow: 1;
+
+        h3 {
+            font-family: v.$font-title;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: v.$color-text;
+
+            // Evita que nombres largos rompan el diseño (Corte a 2 líneas)
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2; // Para navegadores actuales (Chrome, Safari, Edge)
+            line-clamp: 2;         // Propiedad estándar para compatibilidad futura
+            overflow: hidden;
+            height: 2.4em; 
+        }
+
+        .price {
+            color: v.$color-accent;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+    }
+
+    .btn-add {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        background: v.$color-text;
+        color: white;
+        cursor: pointer;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        transition: v.$transition;
+
+        &:hover { 
+            background: v.$color-accent; 
+        }
+        &:active { background: darken(v.$color-accent, 8%); transform: scale(0.98); }
+        &.clicked { background: darken(v.$color-accent, 8%); transform: scale(0.98); animation: btn-press 380ms ease forwards; }
+    }
+}
+
+// 3. ESTRUCTURA DE CATEGORÍAS Y CONTROLES
+.category-section {
+    padding: 3rem 0;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(v.$color-text, 0.05);
+
+    &:last-child { border-bottom: none; }
+
+    .category-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding: 0 10px;
+
+        h2 {
+            font-family: v.$font-title;
+            font-size: clamp(1.3rem, 3vw, 1.6rem);
+            color: v.$color-text;
+            position: relative;
+            
+            &::after {
+                content: '';
+                position: absolute;
+                bottom: -5px;
+                left: 0;
+                width: 40px;
+                height: 2px;
+                background-color: v.$color-accent;
+            }
+        }
+
+        .carousel-controls {
+            display: flex;
+            gap: 8px;
+
+            // OCULTAR FLECHAS EN MÓVIL/TABLET
+            // En móviles el usuario usa el pulgar, las flechas estorban.
+            @media (max-width: v.$tablet) {
+                display: none; 
+            }
+
+            .ctrl-btn {
+                background: v.$color-white;
+                border: 1px solid rgba(v.$color-text, 0.1);
+                width: 38px;
+                height: 38px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                color: v.$color-text;
+                font-size: 0.8rem;
+                user-select: none;
+
+                &:hover {
+                    background: v.$color-text;
+                    color: v.$color-white;
+                    border-color: v.$color-text;
+                    transform: scale(1.1);
+                }
+
+                &:active {
+                    transform: scale(0.9);
+                }
+            }
+        }
+    }
+}
+
+// 4. LÓGICA DEL CARRUSEL RESPONSIVO
+.product-carousel {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto; 
+    scroll-behavior: smooth;
+    padding: 10px 10px 30px 10px;
+    
+    // Escondemos barra de scroll
+    scrollbar-width: none; 
+    &::-webkit-scrollbar { display: none; }
+
+    // Soporte táctil
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory; 
+
+    // TAMAÑO EN DESKTOP
+    .product-card {
+        flex: 0 0 280px; 
+        width: 280px;
+    }
+
+    // TAMAÑO EN MÓVIL (Efecto Peek)
+    @media (max-width: v.$tablet) {
+        gap: 15px;
+        padding-right: 40px; // Espacio extra al final para que no corte brusco
+
+        .product-card {
+            // El 80% asegura que la siguiente tarjeta se vea un 20% (el "peek")
+            flex: 0 0 80%; 
+            width: 80%;
+        }
+    }
+
+    @media (max-width: v.$mobile) {
+        .product-card {
+            flex: 0 0 85%; // En pantallas pequeñas, la tarjeta es un poco más ancha
+            width: 85%;
+        }
+    }
+}
+
+/* Product modal styles (moved to SCSS for source control) */
+.product-modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; z-index: 3000; }
+.product-modal[aria-hidden="false"] { display: flex; }
+.product-modal .pm-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); }
+.product-modal .pm-content { position: relative; width: 92%; max-width: 1100px; background: v.$color-white; border-radius: 10px; box-shadow: 0 30px 80px rgba(0,0,0,0.35); overflow: hidden; transform: translateY(20px) scale(0.98); opacity: 0; transition: opacity 260ms ease, transform 260ms ease; }
+.product-modal[aria-hidden="false"] .pm-content { transform: translateY(0) scale(1); opacity: 1; }
+.product-modal .pm-close { position: absolute; top: 12px; right: 12px; z-index: 10; background: transparent; border: none; font-size: 28px; cursor: pointer; }
+.product-modal .pm-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(255,255,255,0.9); border: none; width: 48px; height: 48px; border-radius: 8px; cursor: pointer; font-size: 22px; }
+.product-modal .pm-prev { left: 12px; }
+.product-modal .pm-next { right: 12px; }
+
+.pm-grid { display: grid; grid-template-columns: 45% 55%; gap: 24px; align-items: stretch; }
+.pm-gallery { background: #111; display:flex; align-items:center; justify-content:center; min-height: 420px; overflow: hidden; }
+.pm-gallery img { width: 100%; height: 100%; object-fit: contain; display:block; max-height: 70vh; }
+.pm-info { padding: 30px; overflow-y: auto; max-height: calc(80vh - 60px); }
+.pm-ingredients { font-size: 0.95rem; color: #444; background: #fafafa; padding: 10px; border-radius: 8px; margin-bottom: 12px; line-height: 1.4; }
+.pm-source { font-size: 0.85rem; color: #777; margin-bottom: 12px; }
+.pm-info .small { margin: 0 0 12px 0; }
+
+@media (max-width: 900px) {
+    .pm-grid { grid-template-columns: 1fr; }
+    .pm-gallery { min-height: 320px; }
+    .product-modal .pm-arrow { display: none; }
+}
+
+@media (max-width: 480px) {
+    .pm-info { padding: 14px; max-height: calc(68vh - 56px); font-size: 0.95rem; }
+    .pm-info h3 { font-size: 1.25rem; margin-bottom: 8px; }
+    .pm-desc { font-size: 0.95rem; }
+    .pm-ingredients { font-size: 0.9rem; padding: 8px; }
+    .pm-source { font-size: 0.82rem; }
+    .pm-price { font-size: 1.05rem; }
+    .pm-controls { flex-direction: column; gap: 10px; align-items: stretch; }
+    .pm-info .btn-add { width: 100%; padding: 10px 14px; font-size: 0.95rem; }
+    .product-modal .pm-close { top: 8px; right: 8px; font-size: 26px; }
+    .pm-grid { grid-template-columns: 1fr; }
+    .pm-gallery { min-height: 240px; }
+    .pm-gallery img { max-height: 40vh; object-fit: contain; }
+    .pm-quantity button { width:32px; height:32px; }
+    .pm-quantity span { min-width:24px; }
+    .product-modal .pm-content { width: 94%; max-width: 520px; }
+}
+
+@keyframes btn-press {
+    0% { transform: scale(1); }
+    40% { transform: scale(0.96); }
+    100% { transform: scale(1); }
+}

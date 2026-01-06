@@ -1,0 +1,218 @@
+@use "variables" as v;
+
+// 1. CARRITO LATERAL (DRAWER) - Sin cambios, funciona perfecto
+.cart-drawer {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 100%;
+    max-width: 400px;
+    height: 100%;
+    background: v.$color-white;
+    z-index: 2000; // Aumentamos para asegurar que tape todo
+    transition: 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: -5px 0 30px rgba(0,0,0,0.1);
+
+    &.active { right: 0; }
+}
+
+.cart-header {
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+
+    h3 { 
+        font-family: v.$font-title; 
+        font-size: 1.5rem; 
+        color: v.$color-text;
+    }
+    
+    button { 
+        background: none; 
+        border: none; 
+        font-size: 2rem; 
+        cursor: pointer; 
+        color: v.$color-text;
+        line-height: 1;
+        &:hover { color: v.$color-accent; }
+    }
+}
+
+.cart-items {
+    flex: 1;
+    overflow-y: auto;
+    padding: 2rem;
+
+    .cart-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #f9f9f9;
+
+        h4 { font-size: 0.9rem; margin-bottom: 5px; }
+        p { color: v.$color-accent; font-weight: 600; }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            
+            button { 
+                width: 28px; 
+                height: 28px; 
+                border: 1px solid #eee; 
+                background: v.$color-white; 
+                cursor: pointer;
+                transition: all 0.2s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                
+                &:hover { 
+                    background: v.$color-text; 
+                    color: white; 
+                    border-color: v.$color-text;
+                }
+            }
+            span { font-weight: 600; min-width: 20px; text-align: center; }
+        }
+    }
+}
+
+.cart-footer {
+    padding: 2rem;
+    background: v.$color-bg;
+    border-top: 1px solid #eee;
+
+    .total {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        color: v.$color-text;
+    }
+
+    .btn-checkout {
+        width: 100%;
+        padding: 1.2rem;
+        background: #25d366; 
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: transform 0.3s, background 0.3s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+
+        &:hover {
+            background: #1eb956;
+            transform: translateY(-2px);
+        }
+    }
+}
+
+// 2. BOTÓN DE ACCIÓN FLOTANTE (FAB) - Redondo y Optimizado
+.cart-fab {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 65px; 
+    height: 65px; 
+    background: v.$color-text;
+    color: white;
+    border-radius: 50%; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3); // Sombra más profunda para que "flote"
+    cursor: pointer;
+    z-index: 1500; // Por encima de casi todo
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 2px solid rgba(255,255,255,0.1);
+
+    // Ocultamos el texto para que sea un círculo limpio
+    .fab-text {
+        display: none;
+    }
+
+    // Estado inicial (Para el efecto de aparición al hacer scroll)
+    opacity: 0;
+    transform: scale(0.5) translateY(50px);
+    visibility: hidden;
+
+    &.visible {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        visibility: visible;
+    }
+
+    &:hover {
+        background: v.$color-accent;
+        transform: scale(1.1) rotate(5deg);
+    }
+
+    &.bump {
+        animation: fab-bump 0.4s ease;
+    }
+
+    .fab-icon {
+        position: relative;
+        font-size: 1.8rem; // Icono más grande y visible
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -12px;
+            background: v.$color-accent;
+            color: v.$color-text;
+            font-size: 0.8rem;
+            font-weight: 800;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 2px solid v.$color-text;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+    }
+}
+
+// Animación de rebote (POP)
+@keyframes fab-bump {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+// 3. OVERLAY Y UTILIDADES
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: v.$color-overlay;
+    display: none;
+    z-index: 1800;
+    backdrop-filter: blur(4px);
+    
+    &.active { display: block; }
+}

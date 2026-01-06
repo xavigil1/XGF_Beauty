@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XGF Beauty | Skincare Orgánico & Minimalista</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="header">
+        <nav class="nav container">
+            <div class="logo">XGF Beauty</div>
+            <div class="search-wrap">
+                <input id="product-search" type="search" placeholder="Buscar productos o categorías..." aria-label="Buscar productos" autocomplete="off">
+                <div id="search-suggestions" class="search-suggestions" role="listbox" aria-label="Sugerencias"></div>
+            </div>
+            
+            <ul class="menu">
+                <li><a href="#productos">Tienda</a></li>
+                <li><a href="#sobre-nosotros">Nosotros</a></li>
+            </ul>
+            <div class="cart-icon" id="cart-toggle">
+                <span>Carrito</span>
+                <span id="cart-count">0</span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero-slider" id="hero-slider">
+            <div class="slide active">
+                <div class="slide-image" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('./images/hero1.jpg');"></div>
+                <div class="hero-content container">
+                    <h1>Protege tu piel con la pureza de la naturaleza</h1>
+                    <p>Descubre el poder de la centella.</p>
+                    <a href="#productos" class="btn">Comprar Ahora</a>
+                </div>
+            </div>
+
+            <div class="slide">
+                <div class="slide-image" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('./images/hero2.jpg');"></div>
+                <div class="hero-content container">
+                    <h2>Glow Serum: Brillo Natural</h2>
+                    <p>Piel radiante con propóleo y niacinamida.</p>
+                    <a href="#productos" class="btn">Ver Oferta</a>
+                </div>
+            </div>
+
+            <div class="slide">
+                <div class="slide-image" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('./images/hero3.jpg');"></div>
+                <div class="hero-content container">
+                    <h2>K-Pop Merch & Skincare</h2>
+                    <p>Tus idols favoritos y tu rutina en un solo lugar.</p>
+                    <a href="#productos" class="btn">Explorar Merch</a>
+                </div>
+            </div>
+
+            <div class="slider-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </section>
+
+        <section class="products container" id="productos">
+            <h2 class="section-title">Nuestra Colección</h2>
+            
+            <section class="categories container">
+                <div class="category-filters" id="category-filters">
+                    <button class="filter-btn active" data-category="all">Todos</button>
+                    <button class="filter-btn" data-category="Protectores Solares">Solares</button>
+                    <button class="filter-btn" data-category="Limpiadores y Serums">Serums & Limpieza</button>
+                    <button class="filter-btn" data-category="Mascarillas">Mascarillas</button>
+                    <button class="filter-btn" data-category="Parches para Acné">Parches</button>
+                    <button class="filter-btn" data-category="Merch Kpop">Merch Kpop</button>
+                    <button class="filter-btn" data-category="Variados">Variados</button>
+                </div>
+            </section>
+
+            <div id="product-list"></div>
+        </section>
+
+        <section class="benefits">
+            <div class="container">
+                <div class="benefits-intro">
+                    <h3>Nuestra tienda</h3>
+                    <p>
+                        En XGF Beauty traemos lo mejor del cuidado coreano: marcas y fórmulas seleccionadas por su
+                        eficacia y calidad. Cada producto que ofrecemos pasa por una curación cuidadosa para
+                        garantizar resultados visibles y una experiencia segura — queremos que confíes en lo que
+                        compras y en quienes lo seleccionan para ti.
+                    </p>
+                </div>
+
+                <div class="benefit-grid">
+                    <div class="benefit-item">
+                        <span>🌿</span>
+                        <p>100% Orgánico</p>
+                    </div>
+                    <div class="benefit-item">
+                        <span>🐰</span>
+                        <p>Cruelty Free</p>
+                    </div>
+                    <div class="benefit-item">
+                        <span>♻️</span>
+                        <p>Packaging Sustentable</p>
+                    </div>
+                </div>
+            </div>
+
+                    <!-- Search: Producto no disponible -->
+                    <div id="search-notfound" class="search-notfound" aria-hidden="true">
+                        <div class="snf-overlay" id="snf-overlay"></div>
+                        <div class="snf-content" role="dialog" aria-modal="true" aria-label="Producto no disponible">
+                            <button class="snf-close" id="snf-close" aria-label="Cerrar">&times;</button>
+                            <div class="snf-body">
+                                <h3>Producto no disponible</h3>
+                                <p>Lo sentimos — este producto no está disponible en nuestra tienda.</p>
+                            </div>
+                        </div>
+                    </div>
+        </section>
+    </main>
+
+        <!-- Reels Carousel: sección de videos/reels adaptada desde PORTAFOLIO WEB XAVI -->
+        <section class="reels-carousel container" id="reels">
+            <h2 class="section-title">Recomendaciones & Rutinas</h2>
+            <div class="reels-viewport">
+                <div class="reel-items" id="reel-items-wrapper" role="list">
+                    <!-- JS insertará las tarjetas y duplicará el contenido para efecto infinito -->
+                </div>
+            </div>
+        </section>
+
+    <!-- Product Detail Modal -->
+    <div id="product-modal" class="product-modal" aria-hidden="true">
+        <div class="pm-overlay" id="pm-overlay"></div>
+        <div class="pm-content" role="dialog" aria-modal="true" aria-label="Detalle del producto">
+            <button class="pm-close" id="pm-close" aria-label="Cerrar ventana">&times;</button>
+            <button class="pm-arrow pm-prev" id="pm-prev" aria-label="Producto anterior">&#10094;</button>
+            <button class="pm-arrow pm-next" id="pm-next" aria-label="Producto siguiente">&#10095;</button>
+
+            <div class="pm-grid container">
+                <div class="pm-gallery">
+                    <img id="pm-img" src="" alt="Imagen del producto">
+                </div>
+                <div class="pm-info">
+                    <h3 id="pm-name">Nombre del producto</h3>
+                    <p id="pm-desc">Descripción breve del producto.</p>
+                    <p id="pm-ingredients" class="small" aria-label="Ingredientes"></p>
+                    <p id="pm-source" class="small" aria-label="Fuente"></p>
+                    <div class="pm-price">$<span id="pm-price">0.00</span></div>
+
+                    <div class="pm-controls">
+                        <div class="pm-quantity">
+                            <button id="pm-dec" aria-label="Disminuir cantidad">-</button>
+                            <span id="pm-qty">1</span>
+                            <button id="pm-inc" aria-label="Aumentar cantidad">+</button>
+                        </div>
+                        <button id="pm-add" class="btn-add">Agregar al carrito</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="cart-header">
+            <h3>Tu Carrito</h3>
+            <button id="cart-close">&times;</button>
+        </div>
+        <div class="cart-items" id="cart-items"></div>
+        <div class="cart-footer">
+            <div class="total">Total: $<span id="cart-total">0</span></div>
+            <button id="whatsapp-btn" class="btn-checkout">Comprar por WhatsApp</button>
+        </div>
+    </div>
+    
+    <div class="overlay" id="overlay"></div>
+
+    <div id="cart-fab" class="cart-fab">
+        <div class="fab-icon">
+            <span class="icon">🛍️</span> 
+            <span id="cart-count-fab" class="cart-badge">0</span>
+        </div>
+        <span class="fab-text">🛒</span>
+    </div>
+
+    <footer class="footer container" id="sobre-nosotros">
+        <div class="footer-info">
+            <h4>XGF Beauty</h4>
+            <p>Belleza consciente para el mundo moderno.</p>
+        </div>
+        <div class="footer-social">
+            <a href="https://www.instagram.com/xgf_official/">Instagram</a>
+            <a href="https://www.tiktok.com/@xgf_official">TikTok</a>
+        </div>
+        <div class="footer-payments">
+            <div class="payment-logos">
+                <img src="images/payments/paypal.png" alt="PayPal">
+                <img src="images/payments/binance.png" alt="Binance">
+                <img src="images/payments/airtm.png" alt="Airtm">
+                <img src="images/payments/zinli.png" alt="Zinli">
+                <img src="images/payments/wally.png" alt="Wally">
+                <img src="images/payments/bancodevenezuela.png" alt="Banco de Venezuela">
+                <img src="images/payments/pagomovil.png" alt="Pago Móvil">
+            </div>
+            <p class="small">Pagos seguros y confirmaciones rápidas. Si necesitas ayuda con el pago, contáctanos por WhatsApp.</p>
+            <p class="small">🚚Envios a toda Venezuela vía Zoom.</p>
+        </div>
+    </footer>
+
+    <script src="js/products.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/reels.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/main.js"></script>
+
+</body>
+</html>

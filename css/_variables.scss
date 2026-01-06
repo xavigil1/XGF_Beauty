@@ -1,0 +1,18 @@
+// Paleta de Colores
+$color-bg: #fdfaf7;      // Crema suave
+$color-text: #2d2d2d;    // Gris muy oscuro (mejor que negro puro)
+$color-accent: #8e9775;  // Verde salvia (orgánico)
+$color-white: #ffffff;
+$color-overlay: rgba(0, 0, 0, 0.4);
+
+// Tipografías
+$font-main: 'Montserrat', sans-serif;
+$font-title: 'Playfair Display', serif;
+
+// Sombras y Transiciones
+$shadow-soft: 0 4px 15px rgba(0, 0, 0, 0.05);
+$transition: all 0.3s ease-in-out;
+
+// Breakpoints
+$tablet: 768px;
+$desktop: 1024px;
