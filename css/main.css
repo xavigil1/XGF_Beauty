@@ -333,6 +333,30 @@
   font-weight: 600;
   font-size: 0.95rem;
 }
+.product-card .info .price-old {
+  color: #8e8f98;
+  font-size: 0.85rem;
+  text-decoration: line-through;
+  margin-bottom: 6px;
+}
+.product-card .info .price-current {
+  color: #d42c2c;
+  font-weight: 700;
+  font-size: 1rem;
+}
+.product-card .badge-sale {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: #d42c2c;
+  color: #fff;
+  padding: 6px 10px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  border-radius: 999px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 .product-card .btn-add {
   width: 100%;
   padding: 12px;
@@ -833,7 +857,9 @@ body {
 .pm-info .small { margin: 0 0 12px 0; }
 .pm-info h3 { margin: 0 0 10px 0; font-family: "Playfair Display", serif; }
 .pm-info p { color:#555; line-height:1.6; margin-bottom: 16px; }
-.pm-price { font-size: 1.35rem; font-weight:700; color: #8e9775; margin-bottom: 18px; }
+.pm-price { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: baseline; margin-bottom: 18px; }
+.pm-price .price-old { font-size: 1rem; color: #8e8f98; text-decoration: line-through; }
+.pm-price .price-current { font-size: 1.35rem; font-weight: 700; color: #d42c2c; }
 .pm-controls { display:flex; gap: 16px; align-items:center; }
 .pm-quantity { display:flex; align-items:center; gap:10px; }
 .pm-quantity button { width:36px; height:36px; border-radius:8px; border:1px solid rgba(0,0,0,0.08); background:#fff; cursor:pointer; }

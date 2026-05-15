@@ -11,11 +11,12 @@ function addToCart(id) {
     if (!product) return;
 
     const itemInCart = cart.find(item => item.id === id);
+    const effectivePrice = product.promoPrice && product.promoPrice < product.price ? product.promoPrice : product.price;
 
     if (itemInCart) {
         itemInCart.quantity++;
     } else {
-        cart.push({ ...product, quantity: 1 });
+        cart.push({ ...product, price: effectivePrice, originalPrice: product.price, quantity: 1 });
     }
 
     // --- FEEDBACK VISUAL Y SONORO DEL BOTÓN FLOTANTE ---

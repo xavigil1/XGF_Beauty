@@ -126,12 +126,16 @@
                     <div class="product-carousel" id="${carouselId}">
                         ${grouped[category].map(p => `
                             <div class="product-card" onclick="openProductModal(${p.id})">
+                                ${p.promoPrice && p.promoPrice < p.price ? '<span class="badge-sale">Oferta</span>' : ''}
                                 <div class="img-container">
                                     <img src="${p.img}" alt="${escapeHtml(p.name)}" loading="lazy">
                                 </div>
                                 <div class="info">
                                     <h3>${escapeHtml(p.name)}</h3>
-                                    <p class="price">$${p.price.toFixed(2)}</p>
+                                    ${p.promoPrice && p.promoPrice < p.price ? `
+                                        <p class="price price-old">$${p.price.toFixed(2)}</p>
+                                        <p class="price price-current">$${p.promoPrice.toFixed(2)}</p>
+                                    ` : `<p class="price price-current">$${p.price.toFixed(2)}</p>`}
                                 </div>
                                 <button class="btn-add" onclick="event.stopPropagation(); addToCart(${p.id})">Agregar</button>
                             </div>

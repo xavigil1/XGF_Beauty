@@ -92,6 +92,16 @@ function updateFilterUI() {
 }
 
 // 4. Renderizado de Productos
+function getProductPriceMarkup(product) {
+    if (product.promoPrice && product.promoPrice < product.price) {
+        return `
+            <p class="price price-old">$${product.price.toFixed(2)}</p>
+            <p class="price price-current">$${product.promoPrice.toFixed(2)}</p>
+        `;
+    }
+    return `<p class="price price-current">$${product.price.toFixed(2)}</p>`;
+}
+
 function renderProducts() {
     const mainContainer = document.getElementById('product-list');
     if (!mainContainer) return;
@@ -123,12 +133,13 @@ function renderProducts() {
                 <div class="product-carousel" id="${carouselId}">
                     ${grouped[category].map(p => `
                         <div class="product-card" onclick="openProductModal(${p.id})">
+                            ${p.promoPrice && p.promoPrice < p.price ? '<span class="badge-sale">Oferta</span>' : ''}
                             <div class="img-container">
                                 <img src="${p.img}" alt="${p.name}" loading="lazy">
                             </div>
                             <div class="info">
                                 <h3>${p.name}</h3>
-                                <p class="price">$${p.price.toFixed(2)}</p>
+                                ${getProductPriceMarkup(p)}
                             </div>
                             <button class="btn-add" onclick="event.stopPropagation(); addToCart(${p.id})">Agregar</button>
                         </div>
@@ -237,7 +248,17 @@ function renderProductModal() {
     document.getElementById('pm-img').alt = product.name;
     document.getElementById('pm-name').innerText = product.name;
     document.getElementById('pm-desc').innerText = product.description || 'Descripción: Producto seleccionado cuidadosamente por su calidad y efectividad.';
-    document.getElementById('pm-price').innerText = product.price.toFixed(2);
+    const pmPriceContainer = document.getElementById('pm-price-container');
+    if (pmPriceContainer) {
+        if (product.promoPrice && product.promoPrice < product.price) {
+            pmPriceContainer.innerHTML = `
+                <span class="price-old">$${product.price.toFixed(2)}</span>
+                <span class="price-current">$${product.promoPrice.toFixed(2)}</span>
+            `;
+        } else {
+            pmPriceContainer.innerHTML = `<span class="price-current">$${product.price.toFixed(2)}</span>`;
+        }
+    }
     document.getElementById('pm-qty').innerText = pmQty;
     // Ingredientes y fuente (si existen)
     const ingrEl = document.getElementById('pm-ingredients');
@@ -280,12 +301,13 @@ function changeModalQty(delta) {
 function addToCartModal() {
     const product = PRODUCTS[pmIndex];
     if (!product) return;
-    // add with quantity
+    const effectivePrice = product.promoPrice && product.promoPrice < product.price ? product.promoPrice : product.price;
+
     const existing = cart.find(i => i.id === product.id);
     if (existing) {
         existing.quantity += pmQty;
     } else {
-        cart.push({ ...product, quantity: pmQty });
+        cart.push({ ...product, price: effectivePrice, originalPrice: product.price, quantity: pmQty });
     }
     updateCart();
     // bump FAB
